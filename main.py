@@ -1,5 +1,6 @@
-
-from types import NoneType
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 from flask import Flask, Response, request
 from models import Candidato, Votacao, Votos
 from database import db
@@ -8,9 +9,12 @@ import json
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///dbteste.db"
 db.init_app(app)
-
+NoneType = type(None)
 
 def get_response(content, message=False, error=False):
+    """
+    Make a response to an endpoint
+    """
     body = dict()
     body['content'] = content
     if error:
@@ -220,7 +224,7 @@ def listar_votos():
     return get_response(content=votos)
 
 # Deletar voto
-@app.route('/delete/votos/<id>', methods=['DELETE',])
+@app.route('/delete/voto/<id>', methods=['DELETE',])
 def deletar_voto(id):
     if id == 'all':
         if request.args.get('candidato'):
@@ -265,6 +269,20 @@ def criar_voto():
     except Exception as e:
         return get_response(content={}, error='True', message=e)
 
+# Atualizar voto
+@app.route('/update/voto/<id>', methods=['PUT',])
+def atualizar_voto(id):
+    try:
+        request_json = request.get_json()
+        voto_objeto = Votos.quer.filter_by(id=id)
+        if 'num_candidato' in request_json:
+            voto_objeto.num_candidato = request_json['num_candidato']
+        if 'id_votacao' in request_json:
+            voto_objeto.id_votacao = request_json['id_votacao']
+    except KeyError:
+        return get_response(content={}, error=True, message='Algum campo não foi informado corretamente!')
+    except Exception as e:
+        return get_response(content={}, error='True', message=e)
 
 @app.route('/')
 def teste():
