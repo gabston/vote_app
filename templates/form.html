@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Vote agora</title>
+</head>
+<body>
+<h1>Votar</h1>
+<ul>
+    {% for item in lista %}
+    <li>
+        ID votação: {{item.id}} | Candidato 1 [ {{item.num_candidato1}} ] | VS | Candidato 2 [ {{item.num_candidato2}} ] | ({{item.cargo}}) - > {{ votos[0] }}
+    </li>
+    {% endfor %}
+</ul>
+<form method="POST" action="{{ url_for('pagina_votar') }}">
+    <label>Núm Candidato</label>
+    <input type="text" name="num"><br>
+    <label>ID Votação</label>
+    <input type="text" name="id_votacao"><br>
+    <input type="submit" name="voto" value="Votar">
+</form>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>Votos</title>
+</head>
+<body>
+<h1>Votos cadastrados</h1>
+<ul>
+    {% for item in lista %}
+    <li>
+        ID votação: {{item.id}} | Candidato 1 [ {{item.num_candidato1}} ] | VS | Candidato 2 [ {{item.num_candidato2}} ] | ({{item.cargo}})
+    </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
